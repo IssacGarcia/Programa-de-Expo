@@ -10,3 +10,4 @@ Route::prefix('persona')->group(function () {
     Route::put('/{persona}', [PersonaController::class, 'update'])->name('update')->whereNumber('persona');
     Route::delete('/{persona}', [PersonaController::class, 'destroy'])->name('destroy')->whereNumber('persona');
 });
+

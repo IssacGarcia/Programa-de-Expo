@@ -12,88 +12,96 @@ use Illuminate\Support\Facades\Auth;
 
 
 
+
 class LoginController extends Controller
 {
-    //crear un controlador con login con aws
-    use RespuestaAPI;
+    //crear un controlador con login con jwt
 
-    protected $reglas =
-    [
-        'email' => 'required|string|max:255',
-        'password' => 'required|string|max:255',
-    ];
+    use RespuestaAPI;
 
     public function login(Request $request)
     {
-        //Se valida la solicitud
-        $validacion = Validator::make($request->all(), $this->reglas);
-        //Si la validacion falla, se retorna un error
-        if ($validacion->fails()) {
-            return $this->error($validacion->errors(), 400);
-        }
-        //Se obtienen las credenciales
-        $credenciales = request(['email', 'password']);
-        //Se verifica si las credenciales son correctas
-        if (!Auth::attempt($credenciales)) {
+        $credenciales = $request->only('email', 'password');
+        $token = Auth::attempt($credenciales);
+        if (!$token) {
             return $this->error('Credenciales incorrectas', 401);
         }
-        //Se obtiene el usuario
-        $usuario = User::where('email', $request->email)->first();
-        //Se crea el token
-        $token = $usuario->createToken('auth_token')->plainTextToken;
-        //Se retorna la respuesta
-        return $this->success([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
+        return $this->success(['token' => $token]);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return $this->success('Sesion cerrada');
+    }
+
+    public function refresh()
+    {
+        $token = Auth::refresh();
+        return $this->success(['token' => $token]);
+    }
+
+    public function me()
+    {
+        $user = Auth::user();
+        return $this->success($user);
+    }
+
+    public function payload()
+    {
+        return Auth::payload();
+    }
+
+    public function register(Request $request)
+    {
+        $validacion = Validator::make($request->all(), [
+            'name' => 'required|string|max:60',
+            'email' => 'required|string|max:255',
+            'password' => 'required|string|max:60',
         ]);
+
+        if ($validacion->fails()) {
+            return $this->error('Error de validacion', 422, $validacion->errors());
+        }
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return $this->success($user);
     }
 
-    public function logout(Request $request)
+    public function update(Request $request, $id)
     {
-        //Se obtiene el usuario autenticado
-        $usuario = $request->user();
-        //Se revoca el token
-        $usuario->tokens()->where('id', $usuario->currentAccessToken()->id)->delete();
-        //Se retorna la respuesta
-        return $this->success('Token revocado');
-    }
-
-    public function logoutAll(Request $request)
-    {
-        //Se obtiene el usuario autenticado
-        $usuario = $request->user();
-        //Se revocan todos los tokens
-        $usuario->tokens()->delete();
-        //Se retorna la respuesta
-        return $this->success('Todos los tokens han sido revocados');
-    }
-
-    public function user(Request $request)
-    {
-        //Se retorna la respuesta
-        return $this->success($request->user());
-    }
-
-    public function refresh(Request $request)
-    {
-        //Se obtiene el usuario autenticado
-        $usuario = $request->user();
-        //Se revoca el token
-        $usuario->tokens()->where('id', $usuario->currentAccessToken()->id)->delete();
-        //Se crea el token
-        $token = $usuario->createToken('auth_token')->plainTextToken;
-        //Se retorna la respuesta
-        return $this->success([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
+        $validacion = Validator::make($request->all(), [
+            'name' => 'required|string|max:60',
+            'email' => 'required|string|max:255',
+            'password' => 'required|string|max:60',
         ]);
+
+        if ($validacion->fails()) {
+            return $this->error('Error de validacion', 422, $validacion->errors());
+        }
+
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return $this->success($user);
     }
 
-    public function prueba()
+    public function destroy($id)
     {
-        return $this->success('Prueba exitosa');
+        $user = User::find($id);
+        $user->delete();
+        return $this->success($user);
     }
-
     
     
 

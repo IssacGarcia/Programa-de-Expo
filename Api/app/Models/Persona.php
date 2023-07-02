@@ -20,6 +20,7 @@ class Persona extends Model
         'pais',
         'codigo_postal',
         'estado',
+        'user_id',
     ];
 
     protected $hidden = [

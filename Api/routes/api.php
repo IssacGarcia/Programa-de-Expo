@@ -18,4 +18,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+
+
+
 require __DIR__ . '/Api/PersonasRoute.php';
+require __DIR__ . '/Api/LoginRoute.php';

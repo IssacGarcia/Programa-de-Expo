@@ -8,6 +8,7 @@ use App\Traits\RespuestaAPI;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Testing\Constraints\SoftDeletedInDatabase;
 
+
 class PersonasController extends Controller
 {
     use RespuestaAPI;
