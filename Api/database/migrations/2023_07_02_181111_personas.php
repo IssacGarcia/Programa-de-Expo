@@ -18,13 +18,13 @@ return new class extends Migration
             $table->id();
             $table->string('nombre', 100);
             $table->string('apellido', 100);
-            $table->string('email', 100)->unique();
-            $table->string('telefono', 100);
+            $table->integer('telefono', 100);
             $table->string('direccion', 100);
             $table->string('ciudad', 100);
             $table->string('pais', 100);
             $table->string('codigo_postal', 100);
             $table->string('estado', 100);
+
             $table->softDeletes();
 
 

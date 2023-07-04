@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PersonaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +18,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-require __DIR__ . '/Api/PersonasRoute.php';
-require __DIR__ . '/Api/LoginRoute.php';
+require_once __DIR__ . '/SPersonas/Personas.php';

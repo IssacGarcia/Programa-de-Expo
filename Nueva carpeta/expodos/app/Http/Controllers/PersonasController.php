@@ -6,23 +6,21 @@ use Illuminate\Http\Request;
 use App\Models\Persona;
 use App\Traits\RespuestaAPI;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Testing\Constraints\SoftDeletedInDatabase;
 
 
 class PersonasController extends Controller
 {
+  
     use RespuestaAPI;
 
     protected $reglas =
     [
         'nombre' => 'required|string|max:60',
-        'apellido' => 'required|string|max:60',
-        'telefono' => 'required|integer',
+        'apellido_p' => 'required|string|max:60',
+        'apellido_m' => 'required|string|max:60',
         'direccion' => 'required|string|max:60',
         'ciudad' => 'required|string|max:60',
         'pais' => 'required|string|max:60',
-        'codigo_postal' => 'required|string|max:10',
-        'estado' => 'required|string|max:50',
     ];
 
     /**
@@ -76,7 +74,7 @@ class PersonasController extends Controller
      */
     public function show($id)
     {
-        //
+        //hola ;3git
     }
 
     /**

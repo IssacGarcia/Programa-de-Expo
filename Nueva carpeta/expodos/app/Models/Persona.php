@@ -6,19 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Persona extends Model
+class Persona extends Model 
 {
-    use HasFactory,SoftDeletes;
-
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'nombre',
-        'apellido',
-        'telefono',
+        'apellido_p',
+        'apellido_m',
         'direccion',
         'ciudad',
         'pais',
-        'codigo_postal',
-        'estado',
     ];
 
     protected $hidden = [
@@ -27,5 +24,5 @@ class Persona extends Model
         'deleted_at',
     ];
 
-    
+
 }
